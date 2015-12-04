@@ -13,14 +13,13 @@ $(document).ready(function() {
     });
   }
 
-  function queryRemoteDbForUser(firstname, lastname) {
-    return $.get('_view/usersbyname?key="' + firstname + '%20' + lastname + '"');
-  }
-
   function getUserIdFromQueryResult(result) {
     var dfd = jQuery.Deferred();
-    console.log('got result, remote : ' + result);
-    var users = JSON.parse(result).rows;
+    console.log('got result : ' + JSON.stringify(result));
+    if (typeof result === 'string' || result instanceof String) {
+      result = JSON.parse(result);
+    }
+    var users = result.rows;
     if (users.length == 0) {
       console.log('Unknown user.');
       return dfd.reject("Unknown user.");
@@ -50,31 +49,25 @@ $(document).ready(function() {
 
   // Returns a function(uuid), taking userId in the closure.
   function putLocation(userId, country, placename) {
-    return function(uuid) {
-      console.log('putlocation with userId ' + userId + ', uuid ' + uuid);
-      var locationData = {};
-      locationData.user = userId;
-      locationData.type = "location";
-      locationData.country = country;
-      locationData.placename = placename;
-      locationData.timestamp_sec = Math.floor(Date.now() / 1000); // in millis would have been better...
+    console.log('putlocation with userId ' + userId);
+    var locationData = {};
+    locationData.user = userId;
+    locationData.type = "location";
+    locationData.country = country;
+    locationData.placename = placename;
+    locationData.timestamp_sec = Math.floor(Date.now() / 1000); // in millis would have been better...
 
-      return putRemote(uuid, locationData)
-        .then(function(data) {
-          return data; // resolve? TODO
-        }, function(err) {
-          console.log('PUT error : ' + JSON.stringify(err));
-          return "Error while saving."
-        });
-    };
+    return put(locationData)
+      .then(function(data) {
+        return data; // resolve? TODO
+      }, function(err) {
+        console.log('PUT error : ' + JSON.stringify(err));
+        return "Error while saving."
+      });
   }
 
-  function putRemote(uuid, data) {
-    return $.ajax({
-      method: 'PUT',
-      url: '../../' + uuid,
-      data: JSON.stringify(data)
-    });
+  function put(data) {
+    return db.post(data);
   }
 
   function getInputs() {
@@ -104,12 +97,11 @@ $(document).ready(function() {
       return;
     }
 
-    queryRemoteDbForUser(inputs.firstname, inputs.lastname)
+    queryDbForUser(inputs.firstname, inputs.lastname)
       .then(getUserIdFromQueryResult)
       .then(function(userId) {
         // Found user. 
-        getUuid() // returns uuid
-          .then(putLocation(userId, inputs.country, inputs.placename)) // uses uuid returned
+        putLocation(userId, inputs.country, inputs.placename)
           .then(function(data) {
             console.log('put result ' + data);
             displayMessage('Location submitted! ' +
