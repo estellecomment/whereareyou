@@ -1,54 +1,51 @@
-$( document ).ready(function() {
-	function capitalizeFirstLetter(string) {
-  		return string.charAt(0).toUpperCase() + string.slice(1);
-	}
+$(document).ready(function() {
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
-	function displayMessage(messageString) {
-		$('#messages').html(messageString);
-	}
-	
-	$("#myform").submit(function( event ) {
-		displayMessage('Submitting...');
-		event.preventDefault();
+  function displayMessage(messageString) {
+    $('#messages').html(messageString);
+  }
 
-		// Validate inputs.
-		var $inputs = $('#myform :input');
-		var values = {};
-		$inputs.each(function() {
-			values[this.name] = $(this).val();
-		    });
+  function put(data) {
+    return db.post(data);
+  }
 
-		values.firstname = capitalizeFirstLetter(values.firstname.trim());
-		values.lastname = capitalizeFirstLetter(values.lastname.trim());
-		if (values.firstname === "" || values.lastname === "") {
-			displayMessage('Fill in all the fields please!');
-			return;
-		}
-
-		// Get a UUID from CouchDB
-		$.get('../../../_uuids', function(data) {
-			console.log('got uuid : ' + data);
-			var uuid = JSON.parse(data).uuids[0];
-			
-			// Now put that user!
-			var userData = {};
-			userData.type = "user";
-			userData.firstname = values.firstname;
-			userData.lastname = values.lastname;
-			$.ajax({
-				method: 'PUT',
-				    url: '../../' + uuid,
-				    data: JSON.stringify(userData)
-					    })
-			    .done(function(data) {
-				    console.log('put result ' + data);
-				    displayMessage('New user created. Do your first <a href="form.html">check in</a>!');
-				})
-			    .fail(function(jqXHR, textStatus, errorThrown) {
-				    console.log('Couldn\'t submit : ' + errorThrown);
-				    displayMessage('Couldn\'t create user, sorry.');
-				});
-		    });
-	    });
-	// TODO chain ajax calls properly
+  function getInputs() {
+    var $inputs = $('#myform :input');
+    var out = {};
+    $inputs.each(function() {
+      out[this.name] = $(this).val();
     });
+
+    out.firstname = capitalizeFirstLetter(out.firstname.trim());
+    out.lastname = capitalizeFirstLetter(out.lastname.trim());
+
+    return out;
+  }
+
+  $("#myform").submit(function(event) {
+    displayMessage('Submitting...');
+    event.preventDefault();
+
+    var inputs = getInputs();
+    if (inputs.firstname === "" || inputs.lastname === "") {
+      displayMessage('Fill in all the fields please!');
+      return;
+    }
+
+    // Now put that user!
+    var userData = {};
+    userData.type = "user";
+    userData.firstname = inputs.firstname;
+    userData.lastname = inputs.lastname;
+    put(userData)
+      .then(function(data) {
+        console.log('put result ' + data);
+        displayMessage('New user created. Do your first <a href="form.html">check in</a>!');
+      }, function(errorThrown) {
+        console.log('Couldn\'t submit : ' + JSON.stringify(errorThrown));
+        displayMessage('Couldn\'t create user, sorry.');
+      });
+  });
+});
