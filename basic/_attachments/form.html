@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
+  <link rel="stylesheet" href="whereareyou.css" type="text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="//cdn.jsdelivr.net/pouchdb/5.1.0/pouchdb.min.js"></script>
   <script src="pouchdb.js"></script>
@@ -8,6 +9,7 @@
 </head>
 <body>
   <h1>I am here</h1>
+  <div id="dbloadmessage" class="message"></div>
   <div><a href="_list/latest_location/userlocations">Where is everyone?</a></div>
   <div>
   <form id="myform">
@@ -22,7 +24,7 @@
     <input type="text" name="country" placeholder="Your country">
     <br><br>
     <input type="submit" value="Submit">
-    <div id="messages"></div>
+    <div id="messages" class="message"></div>
   </form>
 </div>
 </body>
