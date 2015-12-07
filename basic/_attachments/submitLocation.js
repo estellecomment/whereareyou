@@ -47,7 +47,6 @@ $(document).ready(function() {
       });
   }
 
-  // Returns a function(uuid), taking userId in the closure.
   function putLocation(userId, country, placename) {
     console.log('putlocation with userId ' + userId);
     var locationData = {};
