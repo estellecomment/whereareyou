@@ -1,9 +1,18 @@
 // Export the db variable.
 var db;
 var dbName = 'whereareyou';
+var waitMessage = 'Database is loading, please wait...';
 
 function displayDbMessage(messageString) {
   $('#dbloadmessage').html(messageString);
+}
+
+function displayReplicationStatus(remoteDocCount) {
+  getLocalDocCount().then(function(count) {
+    var percentDone = count / remoteDocCount * 100;
+    displayDbMessage(waitMessage + " " + percentDone.toFixed(0) + "% done... (" +
+      count + '/' + remoteDocCount + ")");
+  });
 }
 
 function clearDbMessage() {
@@ -13,6 +22,12 @@ function clearDbMessage() {
 function getDbInfo() {
   db.info().then(function(info) {
     console.log(info);
+  });
+}
+
+function printLocalDocCount() {
+  getLocalDocCount().then(function(count) {
+    console.log('Local doc count : ' + count);
   });
 }
 
@@ -40,17 +55,18 @@ function findRemoteDb() {
   return remoteCouch;
 }
 
-function runSync(remoteCouch, isLive, onComplete) {
+function runSync(remoteCouch, isLive, onPaused, onComplete) {
   return PouchDB.sync(dbName, remoteCouch, {
       live: isLive,
       retry: true
     })
     .on('change', function(info) {
-      console.log('replication : change ' + JSON.stringify(info));
+      // Note : doesn't fire in one-time syncs.
+      console.log('replication : change : ' + info.direction + " - docs_written : " + info.change.docs_written +
+        ' - docs_read : ' + info.changes.docs_read);
+      printLocalDocCount();
     })
-    .on('paused', function() {
-      console.log('replication : paused');
-    })
+    .on('paused', onPaused)
     .on('active', function() {
       // replicate resumed (e.g. user went back online)
       console.log('replication : active');
@@ -66,19 +82,21 @@ function runSync(remoteCouch, isLive, onComplete) {
     });
 }
 
-function runOneTimeSync(remoteCouch, onComplete) {
-  return runSync(remoteCouch, false, onComplete);
+function runOneTimeSync(remoteCouch, onPaused, onComplete) {
+  return runSync(remoteCouch, false, onPaused, onComplete);
 }
 
 function runLiveSync(remoteCouch) {
-  return runSync(remoteCouch, true, function() {});
+  return runSync(remoteCouch, true, function() {
+    console.log('replication : paused');
+  }, function() {});
 }
 
 $(document).ready(function() {
   db = new PouchDB(dbName);
 
   var remoteCouch = findRemoteDb();
-  displayDbMessage('Database is loading, please wait...');
+  displayDbMessage(waitMessage);
 
   // Syncing : 
   // Are you online? 
@@ -98,11 +116,18 @@ $(document).ready(function() {
             runLiveSync(remoteCouch);
           } else {
             console.log('Some docs are not replicated yet. Starting one-time sync');
-            runOneTimeSync(remoteCouch, function() {
-              console.log('One-time replication is done! Starting live replication.');
-              clearDbMessage();
-              runLiveSync(remoteCouch);
-            });
+            displayReplicationStatus(remoteDocCount);
+            runOneTimeSync(
+              remoteCouch,
+              function() {
+                console.log('replication : paused');
+                displayReplicationStatus(remoteDocCount);
+              },
+              function() {
+                console.log('One-time replication is done! Starting live replication.');
+                clearDbMessage();
+                runLiveSync(remoteCouch);
+              });
           }
         },
         function() {
