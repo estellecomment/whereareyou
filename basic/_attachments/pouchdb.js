@@ -49,6 +49,8 @@ function findRemoteDb() {
     remoteCouch = "https://whereareyou:wherewherewhere@whereareyou.cloudant.com";
   } else if (window.location.origin === "http://127.0.0.1:5984") {
     remoteCouch = "http://admin:pass@127.0.0.1:5984";
+  } else if (window.location.origin === "http://localhost:5984") {
+    remoteCouch = "http://admin:pass@localhost:5984";
   }
   var dbname = window.location.pathname.split('/')[1];
   remoteCouch = remoteCouch + '/' + dbname;
