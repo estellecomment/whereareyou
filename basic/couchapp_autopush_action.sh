@@ -1,1 +1,1 @@
-couchapp push prod
+couchapp push local

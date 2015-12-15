@@ -1,5 +1,6 @@
 { "env":{
    "test"    : {"db": "$CLOUDANT_COUCH/whereareyou-test"},
    "prod"    : {"db": "$CLOUDANT_COUCH/whereareyou"},
-   "big"    : {"db": "$CLOUDANT_COUCH/whereareyou-big"}
+   "big"    : {"db": "$CLOUDANT_COUCH/whereareyou-big"},
+   "local"  : {"db": "$COUCH/whereareyou"}
 }}
