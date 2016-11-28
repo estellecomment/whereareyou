@@ -1,3 +1,3 @@
 function (doc, req) { 
-    return '<h1>' + doc.firstname + ' ' + doc.lastname + '<h1>';
+    return '<h1>' + doc.name + '<h1>';
 }

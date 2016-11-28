@@ -1,8 +1,4 @@
 $(document).ready(function() {
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
   function displayMessage(messageString) {
     $('#messages').html(messageString);
   }
@@ -18,8 +14,7 @@ $(document).ready(function() {
       out[this.name] = $(this).val();
     });
 
-    out.firstname = capitalizeFirstLetter(out.firstname.trim());
-    out.lastname = capitalizeFirstLetter(out.lastname.trim());
+    out.name = out.name.trim();
 
     return out;
   }
@@ -29,7 +24,7 @@ $(document).ready(function() {
     event.preventDefault();
 
     var inputs = getInputs();
-    if (inputs.firstname === "" || inputs.lastname === "") {
+    if (inputs.name === "") {
       displayMessage('Fill in all the fields please!');
       return;
     }
@@ -37,8 +32,7 @@ $(document).ready(function() {
     // Now put that user!
     var userData = {};
     userData.type = "user";
-    userData.firstname = inputs.firstname;
-    userData.lastname = inputs.lastname;
+    userData.name = inputs.name;
     put(userData)
       .then(function(data) {
         console.log('put result ' + data);

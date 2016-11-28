@@ -7,9 +7,9 @@ $(document).ready(function() {
     $('#messages').html(messageString);
   }
 
-  function queryDbForUser(firstname, lastname) {
+  function queryDbForUser(name) {
     return db.query('basic/usersbyname', {
-      key: firstname + ' ' + lastname
+      key: name
     });
   }
 
@@ -76,8 +76,7 @@ $(document).ready(function() {
       out[this.name] = $(this).val();
     });
 
-    out.firstname = capitalizeFirstLetter(out.firstname.trim());
-    out.lastname = capitalizeFirstLetter(out.lastname.trim());
+    out.name = out.name.trim();
     out.placename = capitalizeFirstLetter(out.placename.trim());
     out.country = capitalizeFirstLetter(out.country.trim());
 
@@ -90,13 +89,13 @@ $(document).ready(function() {
 
     // Validate inputs.
     var inputs = getInputs();
-    if (inputs.firstname === "" || inputs.lastname === "" || inputs.placename === "" ||
+    if (inputs.name === "" || inputs.placename === "" ||
       inputs.country === "") {
       displayMessage('Fill in all the fields please!');
       return;
     }
 
-    queryDbForUser(inputs.firstname, inputs.lastname)
+    queryDbForUser(inputs.name)
       .then(getUserIdFromQueryResult)
       .then(function(userId) {
         // Found user. 

@@ -25,7 +25,7 @@ function(head, req) {
 	    for (userId in users) {
 			var user = users[userId];
 			var userHTML = '<p><a href="../user_locations/userlocations?key=%22' + userId + 
-				'%22">' + user.firstname + ' ' + user.lastname + '</a></p>';
+				'%22">' + user.name + '</a></p>';
 		    var rowHTML;
 			if (latest.hasOwnProperty(userId)) {
 				var location = latest[userId];	

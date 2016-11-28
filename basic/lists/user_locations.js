@@ -23,15 +23,15 @@ function(head, req) {
       return b.timestamp_sec - a.timestamp_sec;
     });
     
-    html = "<html><body><h1>Where are you " + user.firstname + ' ' + user.lastname + '?</h1><ul>';
+    html = "<html><body><h1>Where are you " + user.name + '?</h1><ul>';
     html = html + '<a href="../latest_location/userlocations">Where is everyone?</a>';
     html = html + '<br><a href="../../form.html">I am here</a>';
 
     if (locations.length == 0) {
-      html = html + '<p>' + user.firstname + ' ' + user.lastname + 
+      html = html + '<p>' + user.name + 
       ' has never been seen. Ever. Very mysterious.</p>';
     } else {
-      html = html + '<p>' + user.firstname + ' ' + user.lastname + ' was seen</p><ul>';
+      html = html + '<p>' + user.name + ' was seen</p><ul>';
       for (var i = 0; i < locations.length; i++) {
         var location = locations[i];
         var rowHTML = '<li>' +

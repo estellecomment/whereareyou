@@ -22,7 +22,7 @@ $(document).ready(function() {
   let fillUserTemplate = function(user, location) {
     return '<li>' +
         // add your XSS attack here
-        '<p>' + user.firstname + ' ' + user.lastname + ' was last seen</p>' +
+        '<p>' + user.name + ' was last seen</p>' +
         '<p>on ' + timestampToString(location.timestamp_sec) + '</p>' +
         // or here
         '<p>in ' + location.placename + '</p>' +
