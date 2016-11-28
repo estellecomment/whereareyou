@@ -104,7 +104,7 @@ $(document).ready(function() {
           .then(function(data) {
             console.log('put result ' + data);
             displayMessage('Location submitted! ' +
-              'Check out <a href="_list/latest_location/userlocations">where everyone is</a>.');
+              'Check out <a href="everyone.html">where everyone is</a>.');
           }, function(error) {
             console.log('Couldn\'t submit: ' + error);
             displayMessage('Couldn\'t submit your location : ' + error);
