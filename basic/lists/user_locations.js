@@ -25,7 +25,7 @@ function(head, req) {
     
     html = "<html><body><h1>Where are you " + user.name + '?</h1><ul>';
     html = html + '<a href="../latest_location/userlocations">Where is everyone?</a>';
-    html = html + '<br><a href="../../form.html">I am here</a>';
+    html = html + '<br><a href="../../newLocationForm.html">I am here</a>';
 
     if (locations.length == 0) {
       html = html + '<p>' + user.name + 

@@ -36,7 +36,7 @@ $(document).ready(function() {
     put(userData)
       .then(function(data) {
         console.log('put result ' + data);
-        displayMessage('New user created. Do your first <a href="form.html">check in</a>!');
+        displayMessage('New user created. Do your first <a href="newLocationForm.html">check in</a>!');
       }, function(errorThrown) {
         console.log('Couldn\'t submit : ' + JSON.stringify(errorThrown));
         displayMessage('Couldn\'t create user, sorry.');

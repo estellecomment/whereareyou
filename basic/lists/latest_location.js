@@ -21,7 +21,7 @@ function(head, req) {
 		}
 	    
 	    html = "<html><body><h1>Where is everyone?</h1><ul>";
-  	    html = html + '<a href="../../form.html">I am here</a>';
+  	    html = html + '<a href="../../newLocationForm.html">I am here</a>';
 	    for (userId in users) {
 			var user = users[userId];
 			var userHTML = '<p><a href="../user_locations/userlocations?key=%22' + userId + 
