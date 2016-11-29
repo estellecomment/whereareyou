@@ -31,7 +31,7 @@ $(document).ready(function() {
         '<p>on ' + timestampToString(location.timestamp_millis) + '</p>' +
         // or here
         '<p>in ' + location.place.name + '</p>' +
-        '<p>(' + location.place.formatted_address + ')</p>' +
+        '<p>' + location.place.formatted_address + '</p>' +
         '</li>';
   };
 
@@ -44,7 +44,7 @@ $(document).ready(function() {
 
       var userList = $('#userlist');
       for (let user of users) {
-        userlist.append(fillUserLocationTemplate(user, latestLocations[user._id]));
+        userList.append(fillUserLocationTemplate(user, latestLocations[user._id]));
       }
     })    
     .catch(function(err) {
