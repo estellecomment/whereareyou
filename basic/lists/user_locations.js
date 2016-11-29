@@ -20,7 +20,7 @@ function(head, req) {
     }
     // Sort locations, newer first
     locations.sort(function(a,b) {
-      return b.timestamp_sec - a.timestamp_sec;
+      return b.timestamp_millis - a.timestamp_millis;
     });
     
     html = "<html><body><h1>Where are you " + user.name + '?</h1><ul>';
@@ -35,7 +35,7 @@ function(head, req) {
       for (var i = 0; i < locations.length; i++) {
         var location = locations[i];
         var rowHTML = '<li>' +
-        '</p><p>on ' + utils.timestampToString(location.timestamp_sec) + 
+        '</p><p>on ' + utils.timestampToString(location.timestamp_millis) + 
         '</p><p>in ' + location.placename + 
         ', ' + location.country + '</p></li>';
         html = html + rowHTML;

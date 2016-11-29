@@ -4,25 +4,31 @@
   <link rel="stylesheet" href="whereareyou.css" type="text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="//cdn.jsdelivr.net/pouchdb/5.1.0/pouchdb.min.js"></script>
+  <script src="utils.js"></script>
   <script src="pouchdb.js"></script>
+  <script src="mapSearchBox.js"></script>
   <script src="submitLocation.js"></script>
-</head>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCY_KLA5pAS9awmv07ry6JnZn3xyWeUy0U&libraries=places&callback=initMapSearchBox"
+         async defer></script>
+  </head>
 <body>
   <h1>I am here</h1>
   <div id="dbloadmessage" class="message"></div>
   <div><a href="everyone.html">Where is everyone?</a></div>
+  <br><br>
   <div>
-  <form id="myform">
-    My name:
-    <input type="text" name="name">
-    <br><br>
-    I am in:
-    <input type="text" name="placename" placeholder="Your city, village, place, whatever">,
-    <input type="text" name="country" placeholder="Your country">
-    <br><br>
-    <input type="submit" value="Submit">
-    <div id="messages" class="message"></div>
-  </form>
-</div>
+    <form id="newLocationForm">
+      My name:
+      <input type="text" name="name">
+      <br><br>
+      Select your place on the map below.
+      <br><br>
+      <div id="messages" class="message"></div>
+    </form>
+  </div>
+  <button onclick="savePlace()">Submit</button>
+  <br><br>
+  <input id="map-search-box" class="controls" type="text" placeholder="Search Box">
+  <div id="map"></div>
 </body>
 </html>

@@ -12,7 +12,7 @@ function(head, req) {
 			var userId = row.key;
 			var type = row.value.type;
 			if (type === "location") {
-		    	if (!latest.hasOwnProperty(userId) || latest[userId].timestamp_sec < row.value.timestamp_sec) {
+		    	if (!latest.hasOwnProperty(userId) || latest[userId].timestamp_millis < row.value.timestamp_millis) {
 					latest[userId] = row.value;
 			    }
 			} else if (type == "user") {
@@ -31,7 +31,7 @@ function(head, req) {
 				var location = latest[userId];	
 				rowHTML = 
 			    	'<p>was last seen in ' + location.placename + ', ' + location.country + 
-		    		'</p><p>on ' + utils.timestampToString(location.timestamp_sec) +
+		    		'</p><p>on ' + utils.timestampToString(location.timestamp_millis) +
 		    		'</p>';
 			} else {
 				rowHTML = '<p>was never seen. Ever. Anywhere. Maybe not a real person.</p>';

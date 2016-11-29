@@ -3,7 +3,7 @@ $(document).ready(function() {
     return db.query('basic/locations', { include_docs: true }).then(function (res) {
       let latestLocations = {};
       for (let row of res.rows) {
-        if (!latestLocations[row.key] || row.doc.timestamp_sec > latestLocations[row.key].timestamp_sec) {
+        if (!latestLocations[row.key] || row.doc.timestamp_millis > latestLocations[row.key].timestamp_millis) {
           latestLocations[row.key] = row.doc;
         }
       }
@@ -23,7 +23,7 @@ $(document).ready(function() {
     return '<li>' +
         // add your XSS attack here
         '<p>' + user.name + ' was last seen</p>' +
-        '<p>on ' + timestampToString(location.timestamp_sec) + '</p>' +
+        '<p>on ' + timestampToString(location.timestamp_millis) + '</p>' +
         // or here
         '<p>in ' + location.placename + '</p>' +
         '</li>';
