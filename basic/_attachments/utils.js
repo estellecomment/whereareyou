@@ -1,7 +1,7 @@
 var numMillisInDay = 24 * 60 * 60 * 1000;
 
 var timestampToString = function(timestamp_millis) {
-  date = new Date(timestamp_millis * 1000);
+  date = new Date(timestamp_millis);
   var today = new Date();
   var daysAgo = Math.round(Math.abs((today.getTime() - date.getTime()) / (numMillisInDay)));
   var dateString = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();

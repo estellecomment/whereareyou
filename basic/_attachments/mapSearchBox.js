@@ -90,11 +90,17 @@ function savePlace(){
     return;
   }
   if (!selectedPlace || $.isEmptyObject(selectedPlace) ||
-      !selectedPlace.geometry || !selectedPlace.geometry.location) {
+      !selectedPlace.geometry || !selectedPlace.geometry.location ||
+      !selectedPlace.name ||
+      !selectedPlace.formatted_address) {
     displayMessage('Select a place please.');
     return;    
   }
-  var latLng = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
-  console.log(latLng);
-  submitLocation(name, latLng);
+  var savedPlace = {
+    latLng: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() },
+    name: selectedPlace.name,
+    formatted_address: selectedPlace.formatted_address
+  };
+  console.log(savedPlace);
+  submitLocation(name, savedPlace);
 }

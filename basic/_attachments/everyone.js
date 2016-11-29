@@ -19,13 +19,19 @@ $(document).ready(function() {
 
   // TODO use proper templates!
   // TODO require the utils file properly to get timestampToString.
-  let fillUserTemplate = function(user, location) {
+  let fillUserLocationTemplate = function(user, location) {
+    if (!location) {
+      return '<li>' +
+        '<p>' + user.name + ' has never been seen. Ever. Very mysterious.</p>' +
+        '</li>';
+    }
     return '<li>' +
         // add your XSS attack here
         '<p>' + user.name + ' was last seen</p>' +
         '<p>on ' + timestampToString(location.timestamp_millis) + '</p>' +
         // or here
-        '<p>in ' + location.placename + '</p>' +
+        '<p>in ' + location.place.name + '</p>' +
+        '<p>(' + location.place.formatted_address + ')</p>' +
         '</li>';
   };
 
@@ -38,7 +44,7 @@ $(document).ready(function() {
 
       var userList = $('#userlist');
       for (let user of users) {
-        userlist.append(fillUserTemplate(user, latestLocations[user._id]));
+        userlist.append(fillUserLocationTemplate(user, latestLocations[user._id]));
       }
     })    
     .catch(function(err) {
