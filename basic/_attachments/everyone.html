@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="whereareyou.css" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/pouchdb/5.1.0/pouchdb.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCY_KLA5pAS9awmv07ry6JnZn3xyWeUy0U&callback=initMap"></script>
     <script src="utils.js"></script>
     <script src="pouchdb.js"></script>
     <script src="everyone.js"></script>
@@ -13,8 +14,6 @@
     <a href="newLocationForm.html">I am here</a>
     <ul id="userlist">
     </ul>
-    <iframe src="https://www.google.com/maps/embed/v1/place?q=paris
-      &key=AIzaSyBRQ4FSStnbktxfKNIXovvcVmL4KGfCVEg">
-    </iframe>  
+    <div id="map"></div>
   </body>
 </html>
