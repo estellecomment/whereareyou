@@ -44,7 +44,7 @@ function initMapSearchBox() {
     }));
   };
 
-  let addBounds = function(bounds, place){
+  let addBounds = function(bounds, place) {
     if (!place || !place.geometry) {
       return;
     }
@@ -53,8 +53,15 @@ function initMapSearchBox() {
       bounds.union(place.geometry.viewport);
     } else if (place.geometry.location) {
       bounds.extend(place.geometry.location);
-    }    
+    }
   }
+
+  let clearMarkers = function() {
+    markers.forEach(function(marker) {
+      marker.setMap(null);
+    });
+    markers = [];
+  };
 
   // Listen for the event fired when the user selects a prediction and retrieve
   // more details for that place.
@@ -70,19 +77,11 @@ function initMapSearchBox() {
       console.log('Selected place', selectedPlace);
     }
 
-    // Clear out the old markers.
-    markers.forEach(function(marker) {
-      marker.setMap(null);
-    });
-    markers = [];
+    clearMarkers();
 
     // For each place, get the icon, name and location.
     var bounds = new google.maps.LatLngBounds();
     places.forEach(function(place) {
-      if (!place.geometry) {
-        console.log("Returned place contains no geometry");
-        return;
-      }
       makeMarker(map, markers, place);
       addBounds(bounds, place);
     });
@@ -90,42 +89,61 @@ function initMapSearchBox() {
   });
 }
 
-function savePlace(){
+function savePlace() {
   displayMessage('Submitting...');
   event.preventDefault();
 
-  var name = getInputs('#newLocationForm').name;
-  var place = selectedPlace;
-  console.log('saving place', name, place);  
+  let getValidInputs = function() {
+    var name = getInputs('#newLocationForm').name;
+    var place = selectedPlace;
+    console.log('saving place', name, place);
 
-  // Validate inputs.
-  if (!name || name === "") {
-    displayMessage('Enter a user name please.');
-    return;
-  }
-  if (!place || $.isEmptyObject(place) ||
+    // Validate inputs.
+    if (!name || name === "") {
+      displayMessage('Enter a user name please.');
+      return;
+    }
+    if (!place || $.isEmptyObject(place) ||
       !place.geometry || !place.geometry.location ||
       !place.name ||
       !place.formatted_address) {
-    displayMessage('Select a place please.');
-    return;    
-  }
-  var savedPlace = {
-    geometry: {
-      location: {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng()
+      displayMessage('Select a place please.');
+      return;
+    }
+    return {
+      name: name,
+      place: place
+    };
+  };
+
+  var inputs = getValidInputs();
+  if (!inputs) {
+    return;
+  };
+
+  let makeSaveablePlace = function(place) {
+    var saveablePlace = {
+      geometry: {
+        location: {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng()
+        }
       },
-      viewport: {
+      name: place.name,
+      formatted_address: place.formatted_address,
+    };
+    if (place.geometry.viewport) {
+      saveablePlace.geometry.viewport = {
         east: place.geometry.viewport.b.f,
         north: place.geometry.viewport.f.b,
         west: place.geometry.viewport.b.b,
         south: place.geometry.viewport.f.f
-      }
-    },
-    name: place.name,
-    formatted_address: place.formatted_address,
+      };
+    }
+    return savedPlace;
   };
+
+  var savedPlace = makeSaveablePlace(inputs.place);
   console.log(savedPlace);
-  submitLocation(name, savedPlace);
+  submitLocation(inputs.name, savedPlace);
 }
