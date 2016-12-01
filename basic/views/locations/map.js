@@ -1,5 +1,5 @@
 function(doc) {
   if (doc.type === "location") {
-    emit(doc.user, null);
+    emit(doc.user);
   }
 }
