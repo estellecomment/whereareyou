@@ -19,22 +19,28 @@ $(document).ready(function() {
     });
   };
 
-  // TODO use proper templates!
   // TODO require the utils file properly to get timestampToString.
   let fillUserLocationTemplate = function(user, location) {
+    var neverSeen = '<li> \
+      <p>{{username}} has never been seen. Ever. Very mysterious.</p> \
+      </li>';
+    var seen = '<li>\
+      <p>{{username}} was last seen</p>\
+      <p>on {{date}}</p> \
+      <p>in {{place}}</p> \
+      <p>{{address}}</p>';
+
+    var Mustache = require('mustache');
+
     if (!location) {
-      return '<li>' +
-        '<p>' + user.name + ' has never been seen. Ever. Very mysterious.</p>' +
-        '</li>';
+      return Mustache.render(neverSeen, { username: user.name });
     }
-    return '<li>' +
-        // add your XSS attack here
-        '<p>' + user.name + ' was last seen</p>' +
-        '<p>on ' + timestampToString(location.timestamp_millis) + '</p>' +
-        // or here
-        '<p>in ' + location.place.name + '</p>' +
-        '<p>' + location.place.formatted_address + '</p>' +
-        '</li>';
+    return Mustache.render(seen, { 
+      username: user.name,
+      date: timestampToString(location.timestamp_millis),
+      place: location.place.name,
+      address: location.place.formatted_address
+    });
   };
 
   Promise.all([getUsers(), getLatestLocations()])
@@ -46,8 +52,8 @@ $(document).ready(function() {
 
       var userList = $('#userlist');
       for (let user of users) {
+        userList.append(fillUserLocationTemplate(user, latestLocations[user._id]));
         if (latestLocations[user._id]) {
-          userList.append(fillUserLocationTemplate(user, latestLocations[user._id]));
           mapUtils.addMarker(latestLocations[user._id].place);
         }
       }
