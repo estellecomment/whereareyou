@@ -25,7 +25,11 @@ $(document).ready(function() {
 
     var inputs = getInputs();
     if (inputs.name === "") {
-      displayMessage('Fill in all the fields please!');
+      displayMessage('Fill in your name please.');
+      return;
+    }
+    if (!/^[a-zA-Z]+$/.test(inputs.name)) {
+      displayMessage('Names can only contain letters (no accents, no nothing!).');
       return;
     }
 

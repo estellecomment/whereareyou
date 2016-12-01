@@ -19,6 +19,10 @@ function savePlace() {
       displayMessage('Enter a user name please.');
       return;
     }
+    if (!/^[a-zA-Z]+$/.test(name)) {
+      displayMessage('Names can only contain letters (no accents, no nothing!).');
+      return;
+    }
     if (!place || $.isEmptyObject(place) ||
       !place.geometry || !place.geometry.location ||
       !place.name ||
