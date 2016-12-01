@@ -27,3 +27,7 @@ var getInputs = function(formSelector) {
 var displayMessage = function(messageString) {
   $('#messages').html(messageString);
 }
+
+// Export jquery to global scope.
+// TODO apparently ender can provide smaller subsets of jquery which would be lighter.
+var $ = require('jquery');
