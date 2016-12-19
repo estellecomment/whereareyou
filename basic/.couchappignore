@@ -2,4 +2,7 @@
   "_attachments/ender.js",
   "_attachments/ender.js.map",
   "_attachments/node_modules",
+  "couchapp_autopush.sh",
+  "couchapp_autopush_action.sh",
+  "replace_api_key.sh",
   "node_modules"]

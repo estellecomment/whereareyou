@@ -9,7 +9,7 @@
   <script src="pouchdb.js"></script>
   <script src="mapSearchBox.js"></script>
   <script src="submitLocation.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=aaaa&libraries=places&callback=initMapSearchBox"
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCY_KLA5pAS9awmv07ry6JnZn3xyWeUy0U&libraries=places&callback=initMapSearchBox"
          async defer></script>
   </head>
 <body>
